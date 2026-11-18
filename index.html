@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Calculadora RTC — Reforma Tributária do Consumo</title>
+  <meta name="description" content="Calculadora contábil da Reforma Tributária do Consumo (CBS, IBS e Imposto Seletivo) integrada às APIs oficiais da Receita Federal.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230e6b57'/%3E%3Ctext x='16' y='21.5' font-family='Arial' font-weight='700' font-size='14' fill='white' text-anchor='middle'%3ERT%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="env.js"></script>
+  <script type="module" src="js/app.js"></script>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar" id="sidebar" aria-label="Menu principal">
+      <a class="brand" href="#/">
+        <span class="brand-mark" aria-hidden="true">RT</span>
+        <span class="brand-name">Calculadora RTC<span class="brand-sub">Reforma tributária</span></span>
+      </a>
+
+      <nav class="nav" id="nav">
+        <a href="#/" data-route="/">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
+          Painel
+        </a>
+        <span class="nav-group">Calculadoras</span>
+        <a href="#/regime-geral" data-route="/regime-geral">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="5" y="2.5" width="14" height="19" rx="2"/><path d="M8 7h8M8 11.5h2M12 11.5h2M16 11.5h0M8 15.5h2M12 15.5h2M16 15.5v2.5"/></svg>
+          Regime geral
+        </a>
+        <a href="#/simples-nacional" data-route="/simples-nacional">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 20V10l8-6 8 6v10z"/><path d="M9 20v-6h6v6"/></svg>
+          Simples Nacional
+        </a>
+        <a href="#/danfse" data-route="/danfse">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M14 2.5H6.5a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V8z"/><path d="M14 2.5V8h5.5M8.5 13h7M8.5 17h5"/></svg>
+          Gerador de DANFSe
+        </a>
+        <span class="nav-group">Sistema</span>
+        <a href="#/configuracoes" data-route="/configuracoes">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+          Conexão com as APIs
+        </a>
+      </nav>
+
+      <div class="sidebar-help">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.2a2.6 2.6 0 0 1 5 .8c0 1.8-2.5 2.2-2.5 3.8M12 17h.01"/></svg>
+        <div>Precisa de ajuda?
+          <a href="https://github.com/lferodrigues/calculadora-contabil#readme" target="_blank" rel="noopener">Ler o guia de uso</a>
+        </div>
+      </div>
+    </aside>
+
+    <div class="main">
+      <header class="topbar">
+        <button class="btn btn-ghost btn-sm menu-btn" id="menu-btn" aria-controls="sidebar" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+          <span class="sr-only">Abrir menu</span>
+        </button>
+        <div class="topbar-title" id="topbar-title"></div>
+        <div class="topbar-right">
+          <div class="api-pills" id="api-pills" aria-live="polite"></div>
+          <label class="switch" title="Usa dados de exemplo e cálculos aproximados quando as APIs não estão rodando">
+            <input type="checkbox" id="demo-toggle">
+            Modo demonstração
+          </label>
+        </div>
+      </header>
+
+      <main class="content" id="view" tabindex="-1"></main>
+
+      <footer class="footer">
+        <span><a href="https://feliperodrigues.net" target="_blank" rel="noopener">© <span id="year">2026</span> Luís Felipe Rodrigues</a></span>
+        <span>Cálculos feitos pelas calculadoras abertas da Receita Federal (LC 214/2025). Confira os resultados com seu contador.</span>
+      </footer>
+    </div>
+  </div>
+
+  <div class="toasts" id="toasts" aria-live="polite"></div>
+
+  <dialog class="modal" id="modal">
+    <div class="modal-head"><h2 id="modal-title"></h2><button class="btn btn-ghost btn-sm" data-close aria-label="Fechar">✕</button></div>
+    <div class="modal-body" id="modal-body"></div>
+  </dialog>
+</body>
+</html>
