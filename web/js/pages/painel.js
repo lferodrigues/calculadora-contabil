@@ -99,7 +99,7 @@ export async function render(view) {
       <div class="stack">
         <section class="panel" aria-labelledby="status-t">
           <div class="panel-head">
-            <div><h2 id="status-t">Conexão com as APIs</h2><p>${api.isProxy() ? "Chamadas passando pelo proxy do server.js." : "Chamadas diretas do navegador."}</p></div>
+            <div><h2 id="status-t">Conexão com as APIs</h2><p>${api.isProxy() ? "Chamadas pelo mesmo endereço da página, em /proxy." : "Chamadas diretas do navegador."}</p></div>
             <button class="btn btn-sm" id="recheck">${icon("refresh")}Verificar</button>
           </div>
           <div class="panel-body"><ul class="status-list" id="status-list"></ul></div>

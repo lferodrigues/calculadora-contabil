@@ -66,15 +66,38 @@ PORT=4000 REGIME_API_URL=http://servidor:8080/api node server.js
 
 O proxy existe porque as APIs da Receita restringem CORS: a do Simples Nacional, por exemplo, só libera `http://localhost:4200` por padrão.
 
-### Hospedagem estática (GitHub Pages, nginx, Live Server)
+### Deploy no Vercel
 
-A SPA também funciona como site estático, porque as rotas usam `#/`. Nesse modo o navegador chama as APIs diretamente (endereços em `env.js` ou na página **Conexão com as APIs**), e cada API precisa liberar a origem do site:
+O `vercel.json` publica a interface e as três APIs num único projeto, usando os recursos de *Services* e *Container Runtime* do Vercel (ambos em Beta, disponíveis em todos os planos):
+
+| Caminho público | Serviço | Caminho que a API recebe |
+|---|---|---|
+| `/proxy/regime/*` | container `deploy/regime` | `/api/*` |
+| `/proxy/simples/*` | container `deploy/simples` | `/api/*` |
+| `/proxy/danfse/*` | container `deploy/danfse` | `/*` |
+| todo o resto | arquivos estáticos de `web/` | — |
+
+Os Dockerfiles baixam o código dos repositórios oficiais da Receita durante o build; para atualizar as APIs, basta fazer um novo deploy.
+
+1. **Banco do Simples Nacional.** O repositório oficial não traz os scripts do banco. Coloque o arquivo `calculadora-pro.db` em `deploy/simples/` e faça commit, ou defina a variável de ambiente `DB_DOWNLOAD_URL` no projeto do Vercel (a API baixa o banco ao iniciar). Sem isso, só a página do Simples fica fora do ar.
+2. Em [vercel.com/new](https://vercel.com/new), importe este repositório do GitHub. Não mude o *Root Directory* nem o *Framework Preset*: o `vercel.json` define tudo.
+3. Clique em **Deploy**. O primeiro build demora (Maven e Go baixam as dependências).
+4. Em **Settings → Functions**, troque a região para São Paulo (`gru1`) e faça um novo deploy.
+5. Abra o endereço do projeto. O painel mostra o status das três APIs.
+
+Depois de 5 minutos sem uso, o Vercel desliga os containers; a primeira chamada seguinte espera as APIs Java subirem (alguns segundos). Requisições e respostas têm limite de 4,5 MB.
+
+Pelo terminal, o equivalente é `npm i -g vercel`, `vercel login` e `vercel --prod` na pasta do projeto.
+
+### Hospedagem estática (Live Server, nginx)
+
+A SPA da pasta `web/` também funciona como site estático, porque as rotas usam `#/`. Em `localhost` o navegador chama as APIs diretamente (endereços em `web/env.js` ou na página **Conexão com as APIs**), e cada API precisa liberar a origem do site:
 
 - **Simples Nacional:** `APP_CORS_ALLOWED_ORIGINS=https://seu-site` ao subir a API.
 - **Regime geral:** configure CORS no Spring ou use um proxy reverso.
 - **DANFSe:** já libera `*` para `POST`.
 
-Abrir o `index.html` direto do disco (`file://`) não funciona, porque os navegadores bloqueiam módulos ES nesse caso. Use `node server.js` ou qualquer servidor estático.
+Abrir o `web/index.html` direto do disco (`file://`) não funciona, porque os navegadores bloqueiam módulos ES nesse caso. Use `node server.js` ou qualquer servidor estático.
 
 ### Modo demonstração
 
@@ -85,20 +108,20 @@ Sem as APIs no ar, ligue **Modo demonstração** na barra superior. Os cálculos
 ## Estrutura
 
 ```
-index.html                 casca da SPA (menu lateral, barra superior, rodapé)
-env.js                     endereços padrão em hospedagem estática
-server.js                  servidor estático + proxy das três APIs (Node, sem dependências)
-css/style.css              estilos
-js/app.js                  rotas por hash e status das APIs
-js/api.js                  cliente das três APIs (+ desvio para o modo demonstração)
-js/demo.js                 simulações do modo demonstração
-js/grid.js                 grade de itens no estilo de formulário de ERP
-js/ui.js                   formatação, avisos, diálogo, histórico
-js/pages/painel.js         painel inicial
-js/pages/regime-geral.js   página do regime geral
-js/pages/simples-nacional.js
-js/pages/danfse.js
-js/pages/configuracoes.js  conexão com as APIs
+server.js                      servidor local: entrega web/ e faz proxy das três APIs (Node, sem dependências)
+vercel.json                    deploy no Vercel: a interface e as três APIs num só projeto
+deploy/regime/Dockerfile       imagem da API do regime geral (baixa o código oficial no build)
+deploy/simples/Dockerfile      imagem da API do Simples Nacional
+deploy/danfse/Dockerfile       imagem do gerador de DANFSe
+web/index.html                 casca da SPA (menu lateral, barra superior, rodapé)
+web/env.js                     como a interface encontra as APIs (local, server.js ou domínio publicado)
+web/css/style.css              estilos
+web/js/app.js                  rotas por hash e status das APIs
+web/js/api.js                  cliente das três APIs (+ desvio para o modo demonstração)
+web/js/demo.js                 simulações do modo demonstração
+web/js/grid.js                 grade de itens no estilo de formulário de ERP
+web/js/ui.js                   formatação, avisos, diálogo, histórico
+web/js/pages/*.js              painel, regime geral, Simples Nacional, DANFSe e conexão
 ```
 
 ## Endpoints consumidos

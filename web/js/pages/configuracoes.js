@@ -18,7 +18,7 @@ export async function render(view) {
     <div class="two-col">
       <section class="panel">
         <div class="panel-head"><div><h2>Endereços</h2><p>${proxy
-          ? "A página está sendo servida pelo server.js: as chamadas passam pelo proxy embutido e os endereços reais ficam nas variáveis REGIME_API_URL, SIMPLES_API_URL e DANFSE_API_URL."
+          ? "As chamadas vão para o mesmo endereço da página, em /proxy. No server.js, os endereços reais ficam nas variáveis REGIME_API_URL, SIMPLES_API_URL e DANFSE_API_URL; no Vercel, no vercel.json."
           : "A página está sendo servida como arquivo estático: o navegador chama cada API diretamente, então elas precisam liberar CORS para esta origem."}</p></div></div>
         <form class="panel-body" id="cfg-form">
           ${["regime", "simples", "danfse"].map((k) => `

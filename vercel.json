@@ -1,0 +1,38 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "services": {
+    "regime": {
+      "runtime": "container",
+      "root": "deploy/regime/",
+      "entrypoint": "Dockerfile",
+      "routes": [
+        { "src": "/proxy/regime/(.*)", "transforms": [{ "type": "request.path", "op": "set", "args": "/api/$1" }] }
+      ]
+    },
+    "simples": {
+      "runtime": "container",
+      "root": "deploy/simples/",
+      "entrypoint": "Dockerfile",
+      "routes": [
+        { "src": "/proxy/simples/(.*)", "transforms": [{ "type": "request.path", "op": "set", "args": "/api/$1" }] }
+      ]
+    },
+    "danfse": {
+      "runtime": "container",
+      "root": "deploy/danfse/",
+      "entrypoint": "Dockerfile",
+      "routes": [
+        { "src": "/proxy/danfse/(.*)", "transforms": [{ "type": "request.path", "op": "set", "args": "/$1" }] }
+      ]
+    },
+    "web": {
+      "root": "web/"
+    }
+  },
+  "rewrites": [
+    { "source": "/proxy/regime/(.*)", "destination": { "service": "regime" } },
+    { "source": "/proxy/simples/(.*)", "destination": { "service": "simples" } },
+    { "source": "/proxy/danfse/(.*)", "destination": { "service": "danfse" } },
+    { "source": "/(.*)", "destination": { "service": "web" } }
+  ]
+}

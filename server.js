@@ -17,7 +17,7 @@ const path = require("node:path");
 const { URL } = require("node:url");
 
 const PORT = Number(process.env.PORT || 3000);
-const ROOT = __dirname;
+const ROOT = path.join(__dirname, "web");
 const TARGETS = {
   regime: process.env.REGIME_API_URL || "http://localhost:8080/api",
   simples: process.env.SIMPLES_API_URL || "http://localhost:8082/api",
@@ -73,7 +73,7 @@ function serveStatic(req, res, pathname) {
     return;
   }
   let file = path.normalize(path.join(ROOT, decodeURIComponent(pathname)));
-  if (!(file === ROOT || file.startsWith(ROOT + path.sep)) || /(^|[\\/])\.|node_modules|server\.js$/.test(path.relative(ROOT, file))) {
+  if (!(file === ROOT || file.startsWith(ROOT + path.sep)) || /(^|[\\/])\./.test(path.relative(ROOT, file))) {
     res.writeHead(404); res.end("Não encontrado"); return;
   }
   fs.stat(file, (err, st) => {
